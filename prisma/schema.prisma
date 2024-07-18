@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Sex {
+  Male
+  Female
+}
+model PostLike {
+  id     String   @id @default(uuid())
+  userId String
+  postId String
+  user   User     @relation(fields: [userId], references: [id])
+  post   Post     @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId])
+  @@map("post_likes")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  authorId  String
+  postId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+
+  @@map("comments")
+}
+
+model Post {
+  id        String    @id @default(uuid())
+  text      String
+  location  String
+  likes     Int       @default(0)
+  image     String?
+  authorId  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  author    User?     @relation(fields: [authorId], references: [id])
+  comments  Comment[]
+  postLikes PostLike[]
+
+  @@map("posts")
+}
+
+model User {
+  id                   String        @id @default(uuid())
+  name                 String
+  username             String        @unique
+  email                String        @unique
+  password             String
+  birthdate            DateTime?
+  image                String?
+  sex                  Sex?
+  address              String?
+  phone                String?
+  occupation           String?
+  posts                Post[]
+  createdAt            DateTime      @default(now())
+  comments             Comment[]
+  marketItemsSold      MarketPlace[] @relation("marketItemsSold")
+  marketItemsPurchased MarketPlace[] @relation("marketItemsPurchased")
+  postLikes            PostLike[]
+
+  @@map("users")
+}
+
+model MarketPlace {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  image       String?
+  vendido     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  sellerId    String
+  buyerId     String?
+  seller      User?    @relation(name: "marketItemsSold", fields: [sellerId], references: [id])
+  buyer       User?    @relation(name: "marketItemsPurchased", fields: [buyerId], references: [id])
+
+  @@map("market_items")
+}
