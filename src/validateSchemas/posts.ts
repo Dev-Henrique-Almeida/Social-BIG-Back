@@ -38,3 +38,11 @@ export const UpdatePostSchema = {
     })
     .required(),
 };
+
+export const GetPostSchema = {
+  params: yup
+    .object({
+      id: yup.string().required(),
+    })
+    .required(),
+};

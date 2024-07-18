@@ -68,6 +68,43 @@ export class PostController {
     return reply.status(200).send(posts);
   }
 
+  async getById(request: GenericRequest, reply: FastifyReply) {
+    const { id } = request.params;
+    try {
+      const post = await prismaClient.post.findUnique({
+        where: { id },
+        include: {
+          author: {
+            select: {
+              image: true,
+              name: true,
+              id: true,
+            },
+          },
+          comments: {
+            include: {
+              author: {
+                select: {
+                  image: true,
+                  name: true,
+                  id: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      if (!post) {
+        return reply.status(404).send({ message: "Post not found!" });
+      }
+      return reply.status(200).send(post);
+    } catch (error) {
+      return reply
+        .status(400)
+        .send({ message: "Error fetching post, try again!" });
+    }
+  }
+
   async update(request: BodyRequest, reply: FastifyReply) {
     const { id } = request.params;
     const { text, location, image } = request.body;
@@ -144,11 +181,23 @@ export class PostController {
   async delete(request: GenericRequest, reply: FastifyReply) {
     const { id } = request.params;
     try {
-      await prismaClient.post.delete({
-        where: {
-          id,
-        },
-      });
+      await prismaClient.$transaction([
+        prismaClient.comment.deleteMany({
+          where: {
+            postId: id,
+          },
+        }),
+        prismaClient.postLike.deleteMany({
+          where: {
+            postId: id,
+          },
+        }),
+        prismaClient.post.delete({
+          where: {
+            id,
+          },
+        }),
+      ]);
       return reply.status(200).send({ message: "Post deleted!" });
     } catch (error) {
       return reply
