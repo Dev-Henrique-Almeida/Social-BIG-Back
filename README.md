@@ -1,4 +1,4 @@
-# Social BIG - Back
+# Social BIG - BACK
 
 Este é um projeto backend desenvolvido para uma rede social, utilizando Node.js, TypeScript e Prisma, com funcionalidades para autenticação, criação de posts, comentários e mais.
 
