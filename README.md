@@ -1,5 +1,4 @@
-SOCIAL BIG
-# Social BIG Back
+# Social BIG - Back
 
 Este é um projeto backend desenvolvido para uma rede social, utilizando Node.js, TypeScript e Prisma, com funcionalidades para autenticação, criação de posts, comentários e mais.
 
@@ -34,35 +33,35 @@ Para instalar e executar este projeto localmente, siga os passos abaixo:
 
 1. Clone o repositório:
 
-    ```bash
-    git clone https://github.com/Dev-Henrique-Almeida/Social-Big-Back.git
-    ```
+   ```bash
+   git clone https://github.com/Dev-Henrique-Almeida/Social-Big-Back.git
+   ```
 
 2. Navegue até o diretório do projeto:
 
-    ```bash
-    cd Social-Big-Back
-    ```
+   ```bash
+   cd Social-Big-Back
+   ```
 
 3. Crie o arquivo `.env` com as variáveis de ambiente conforme descrito acima.
 
 4. Instale as dependências:
 
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
 5. Execute as migrações do Prisma para configurar o banco de dados:
 
-    ```bash
-    npx prisma migrate dev
-    ```
+   ```bash
+   npx prisma migrate dev
+   ```
 
 6. Execute o servidor de desenvolvimento:
 
-    ```bash
-    npm run dev
-    ```
+   ```bash
+   npm run dev
+   ```
 
 ## Scripts
 
@@ -70,4 +69,3 @@ Para instalar e executar este projeto localmente, siga os passos abaixo:
 - `npx prisma studio`: Abre o Prisma Studio, uma interface visual para explorar e gerenciar os dados do banco de dados.
 - `npx prisma generate`: Gera o código TypeScript com base no schema do Prisma.
 - `npx prisma db seed`: Executa as sementes do banco de dados definidas no arquivo `prisma/seed.ts`.
-
