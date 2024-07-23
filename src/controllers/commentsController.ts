@@ -15,21 +15,12 @@ type BodyRequest = FastifyRequest & {
     content: string;
     authorId: string;
     postId: string;
-    parentCommentId?: string;
-    userId?: string;
-  };
-};
-
-type LikeRequest = FastifyRequest & {
-  params: GenericParams;
-  body: {
-    userId: string;
   };
 };
 
 export class CommentController {
   async create(request: BodyRequest, reply: FastifyReply) {
-    const { content, authorId, postId, parentCommentId } = request.body;
+    const { content, authorId, postId } = request.body;
 
     try {
       const comment = await prismaClient.comment.create({
@@ -37,7 +28,6 @@ export class CommentController {
           content,
           authorId,
           postId,
-          parentCommentId,
         },
       });
 
@@ -84,61 +74,6 @@ export class CommentController {
       return reply
         .status(400)
         .send({ message: "Error deleting comment, try again!" });
-    }
-  }
-
-  async like(request: LikeRequest, reply: FastifyReply) {
-    const { id: commentId } = request.params;
-    const { userId } = request.body;
-
-    const existingLike = await prismaClient.commentLike.findUnique({
-      where: {
-        userId_commentId: {
-          userId,
-          commentId,
-        },
-      },
-    });
-
-    if (existingLike) {
-      await prismaClient.commentLike.delete({
-        where: {
-          id: existingLike.id,
-        },
-      });
-
-      const comment = await prismaClient.comment.update({
-        where: {
-          id: commentId,
-        },
-        data: {
-          likeCount: {
-            decrement: 1,
-          },
-        },
-      });
-
-      return reply.status(200).send(comment);
-    } else {
-      await prismaClient.commentLike.create({
-        data: {
-          userId,
-          commentId,
-        },
-      });
-
-      const comment = await prismaClient.comment.update({
-        where: {
-          id: commentId,
-        },
-        data: {
-          likeCount: {
-            increment: 1,
-          },
-        },
-      });
-
-      return reply.status(200).send(comment);
     }
   }
 }

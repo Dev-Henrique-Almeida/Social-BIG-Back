@@ -25,7 +25,6 @@ model User {
   marketItemsSold      MarketPlace[] @relation("marketItemsSold")
   marketItemsPurchased MarketPlace[] @relation("marketItemsPurchased")
   postLikes            PostLike[]
-  commentLikes         CommentLike[]
 
   @@map("users")
 }
@@ -51,30 +50,13 @@ model Comment {
   content        String
   authorId       String
   postId         String
-  parentCommentId String?    
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
   author         User        @relation(fields: [authorId], references: [id])
   post           Post        @relation(fields: [postId], references: [id])
-  parentComment  Comment?    @relation(name: "Reply", fields: [parentCommentId], references: [id])
-  replies        Comment[]   @relation(name: "Reply")
-  commentLikes   CommentLike[] @relation("CommentLikes")
-  likeCount      Int         @default(0) 
 
   @@map("comments")
 }
-
-model CommentLike {
-  id        String   @id @default(uuid())
-  userId    String
-  commentId String
-  user      User     @relation(fields: [userId], references: [id])
-  comment   Comment  @relation(fields: [commentId], references: [id], name: "CommentLikes")
-
-  @@unique([userId, commentId])
-  @@map("comment_likes")
-}
-
 
 model PostLike {
   id     String   @id @default(uuid())
