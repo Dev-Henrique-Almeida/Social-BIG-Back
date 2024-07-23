@@ -1,4 +1,4 @@
-import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { decode, verify } from "jsonwebtoken";
 
 type GenericRequest = FastifyRequest & {
@@ -7,8 +7,7 @@ type GenericRequest = FastifyRequest & {
 
 export const AuthMiddleware = async (
   request: GenericRequest,
-  response: FastifyReply,
-  next: HookHandlerDoneFunction,
+  response: FastifyReply
 ) => {
   const authHeaders = request.headers.authorization;
 
@@ -24,7 +23,7 @@ export const AuthMiddleware = async (
     verify(token, process.env.JWT_SECRET!);
 
     const jwt = decode(token);
-    request.userId = jwt?.sub;
+    request.userId = jwt?.sub as string;
   } catch (error) {
     return response.status(401).send({ message: "Error validating token" });
   }
