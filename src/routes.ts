@@ -141,6 +141,12 @@ export function Comments(
     commentController.update
   );
 
+  api.patch(
+    "/like/:id",
+    { schema: RequestWithID, validatorCompiler },
+    commentController.like
+  );
+
   api.delete(
     "/:id",
     { schema: RequestWithID, validatorCompiler },
