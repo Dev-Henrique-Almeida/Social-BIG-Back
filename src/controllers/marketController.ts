@@ -104,7 +104,14 @@ export class MarketController {
         include: {
           buyer: {
             select: {
-              email: true,
+              id: true,
+              name: true,
+              image: true,
+            },
+          },
+          seller: {
+            select: {
+              id: true,
               name: true,
               image: true,
             },
@@ -113,6 +120,7 @@ export class MarketController {
       });
       return reply.status(200).send(item);
     } catch (error) {
+      console.error("Error buying item:", error);
       return reply
         .status(400)
         .send({ message: "Error buying item, try again!" });
