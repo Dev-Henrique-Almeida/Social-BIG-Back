@@ -18,7 +18,7 @@ type BodyRequest = FastifyRequest & {
     birthdate: string;
     address: string;
     phone: string;
-    image: string;
+    image?: string;
   };
 };
 
