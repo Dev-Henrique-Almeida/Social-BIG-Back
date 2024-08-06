@@ -74,6 +74,18 @@ Para instalar e executar este projeto localmente, siga os passos abaixo:
    npm run dev
    ```
 
+7. Para executar com docker basta usar:
+
+   ```bash
+   docker-compose down -v
+   ```
+
+   Depois:
+
+   ```bash
+   docker-compose up --build
+   ```
+
 ## Scripts
 
 - `npx prisma migrate dev`: Executa as migrações do Prisma para configurar o banco de dados.
