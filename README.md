@@ -76,6 +76,20 @@ Para instalar e executar este projeto localmente, siga os passos abaixo:
 
 7. Para executar com docker basta usar:
 
+   1- Passo
+
+   ```bash
+   npm install
+   ```
+
+   2- Passo
+
+   ```bash
+   npx prisma migrate dev --name init
+   ```
+
+   3- Passo
+
    ```bash
    docker-compose down -v
    ```
